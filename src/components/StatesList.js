@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import StateCard from "./StateCard"
 
 const stateNames = [
@@ -6,9 +7,21 @@ const stateNames = [
 
 function StatesList(props) {
 
+  // our search input will CHANGE so we create a state called 'search'
+  // this tracks what we just typed in to our search bar
+  const [search, setSearch] = useState('')
+
+  // this just sets the search state when we type something in
   function handleChange(e) {
-    console.log(e.target.value)
+    setSearch(e.target.value)
   }
+
+  // our states are already strings so we can just call .toLowerCase and .includes
+  // the .includes checks to see if what we typed in (search) is inside the string w're checking (state)
+  const nameSearch = stateNames.filter( state => state.toLowerCase().includes( search.toLowerCase() ) )
+
+  // once again we map the filtered states into cards and pass the name as a string as a prop
+  const stateTags = nameSearch.map( name => <StateCard stateName={name} /> )
 
   return (
     <div className="states-list border-black">
@@ -17,15 +30,11 @@ function StatesList(props) {
 
       <label>Filter States:</label>
       <input type="text" onChange={handleChange} />
-      {/* When someone types into the input above, only show the states that include what has been typed */}
 
       <div className="flex">
 
-        <StateCard />
-        <StateCard />
-        <StateCard />
-
-        {/* delete the state cards above and instead map through the state names to create your cards */}
+        {/* and finally we plug them in! */}
+        { stateTags }
 
       </div>
 
